@@ -1,32 +1,32 @@
 require './lib/ship'
 
 RSpec.describe Ship do
-  xit 'exists' do
+  it 'exists' do
     cruiser = Ship.new("Cruiser", 3)
     expect(cruiser).to be_a(Ship)
   end
 
-  xit 'has a name' do
+  it 'has a name' do
     cruiser = Ship.new("Cruiser", 3)
     expect(cruiser.name).to eq("Cruiser")
   end
 
-  xit 'has a length' do
+  it 'has a length' do
     cruiser = Ship.new("Cruiser", 3)
     expect(cruiser.length).to eq(3)
   end
 
-  xit 'has health' do
+  it 'has health' do
     cruiser = Ship.new("Cruiser", 3)
     expect(cruiser.health).to eq(3)
   end
 
-  xit 'checks if ship is sunk' do
+  it 'checks if ship is sunk' do
     cruiser = Ship.new("Cruiser", 3)
     expect(cruiser.sunk?).to eq(false)
   end
 
-  xit 'checks health after getting hit' do
+  it 'checks health after getting hit' do
     cruiser = Ship.new("Cruiser", 3)
 
     cruiser.hit
