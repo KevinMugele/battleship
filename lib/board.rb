@@ -10,11 +10,11 @@ class Board
   end
 
   def create_cells
-    letters = ("A".."D").to_a.each do |letter|
-      numbers = ("1".."4").to_a.each do |number|
-        @cells["#{letters}#{numbers}"] = Cell.new()
+    ("A".."D").to_a.each do |letter|
+      ("1".."4").to_a.each do |number|
+        cell_coordinate = letter + number
+        @cells[cell_coordinate] = Cell.new(cell_coordinate)
       end
     end
   end
-
 end
