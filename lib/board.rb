@@ -15,6 +15,6 @@ class Board
         @cells[cell_coordinate] = Cell.new(cell_coordinate)
       end
     end
-    @cells 
+    @cells
   end
 end
