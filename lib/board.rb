@@ -6,7 +6,6 @@ class Board
 
   def initialize
     @cells = {}
-
   end
 
   def create_cells
@@ -16,5 +15,6 @@ class Board
         @cells[cell_coordinate] = Cell.new(cell_coordinate)
       end
     end
+    @cells 
   end
 end
