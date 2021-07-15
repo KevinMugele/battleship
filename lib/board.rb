@@ -5,17 +5,18 @@ class Board
   attr_reader :cells
 
   def initialize
-    @cells = {}
+    @cells = create_cells
   end
 
   def create_cells
+    cells = {}
     ("A".."D").to_a.each do |letter|
       ("1".."4").to_a.each do |number|
         cell_coordinate = letter + number
-        @cells[cell_coordinate] = Cell.new(cell_coordinate)
+        cells[cell_coordinate] = Cell.new(cell_coordinate)
       end
     end
-    @cells
+    cells
   end
 
   def valid_coordinate?(coordinate)
@@ -29,29 +30,51 @@ class Board
   end
 
   def consecutive?(coordinates)
-    vertical_column(coordinates) || horizontal_row(coordinates)
+    (vertical_row(coordinates) || horizontal_column(coordinates)) && (horizontal_consecutive(coordinates) || vertical_consecutive(coordinates))
   end
 
-  def vertical_column(coordinates)
+  def vertical_row(coordinates)
     coordinates.all? do |coordinate|
       coordinate[0] == coordinates.first[0]
     end
   end
 
-  def vertical_consecutive(coordinates)
+  def horizontal_consecutive(coordinates)
     ship_length = coordinates.length
-    (1..4).each_cons(ship_length) do |x|
-      #make array of results, check results to coordinates, coordinates need change -
+    coordinate_values = []
+      coordinates.each do |coordinate|
+        coordinate_values << coordinate[1]
+      end
+
+    ("1".."4").each_cons(ship_length).find do |x|
+      x == coordinate_values
+    end
   end
 
-  def horizontal_row(coordinates)
+
+  def vertical_consecutive(coordinates)
+    ship_length = coordinates.length
+    coordinate_values = []
+      coordinates.each do |coordinate|
+        coordinate_values << coordinate[0]
+      end
+
+    ("A".."D").each_cons(ship_length).find do |x|
+      x == coordinate_values
+    end
+  end
+
+  def horizontal_column(coordinates)
     coordinates.all? do |coordinate|
       coordinate[1] == coordinates.first[1]
     end
   end
 
   def valid_placement?(ship, coordinates)
-    ship.length == coordinates.size && not_occupied?(coordinates) && consecutive?(coordinates)
+    if (consecutive?(coordinates) && ship.length == coordinates.size && not_occupied?(coordinates))
+      true
+    else
+      false
+    end
   end
-
 end
