@@ -30,10 +30,10 @@ class Board
   end
 
   def consecutive?(coordinates)
-    (vertical_column(coordinates) || horizontal_row(coordinates)) && horizontal_consecutive(coordinates)
+    (vertical_row(coordinates) || horizontal_column(coordinates)) && (horizontal_consecutive(coordinates) || vertical_consecutive(coordinates))
   end
 
-  def vertical_column(coordinates)
+  def vertical_row(coordinates)
     coordinates.all? do |coordinate|
       coordinate[0] == coordinates.first[0]
     end
@@ -46,18 +46,35 @@ class Board
         coordinate_values << coordinate[1]
       end
 
-    (1..4).each_cons(ship_length).find do |x|
+    ("1".."4").each_cons(ship_length).find do |x|
       x == coordinate_values
     end
   end
 
-  def horizontal_row(coordinates)
+
+  def vertical_consecutive(coordinates)
+    ship_length = coordinates.length
+    coordinate_values = []
+      coordinates.each do |coordinate|
+        coordinate_values << coordinate[0]
+      end
+
+    ("A".."D").each_cons(ship_length).find do |x|
+      x == coordinate_values
+    end
+  end
+
+  def horizontal_column(coordinates)
     coordinates.all? do |coordinate|
       coordinate[1] == coordinates.first[1]
     end
   end
 
   def valid_placement?(ship, coordinates)
-    ship.length == coordinates.size && not_occupied?(coordinates) && consecutive?(coordinates)
+    if (consecutive?(coordinates) && ship.length == coordinates.size && not_occupied?(coordinates))
+      true
+    else
+      false
+    end
   end
 end
