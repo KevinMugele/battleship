@@ -30,7 +30,7 @@ class Board
   end
 
   def consecutive?(coordinates)
-    vertical_column(coordinates) || horizontal_row(coordinates)
+    (vertical_column(coordinates) || horizontal_row(coordinates)) && horizontal_consecutive(coordinates)
   end
 
   def vertical_column(coordinates)
@@ -39,11 +39,16 @@ class Board
     end
   end
 
-  def vertical_consecutive(coordinates)
+  def horizontal_consecutive(coordinates)
     ship_length = coordinates.length
-    (1..4).each_cons(ship_length) do |x|
+    coordinate_values = []
+      coordinates.each do |coordinate|
+        coordinate_values << coordinate[1]
+      end
+
+    (1..4).each_cons(ship_length).find do |x|
+      x == coordinate_values
     end
-      #make array of results, check results to coordinates, coordinates need change -
   end
 
   def horizontal_row(coordinates)
