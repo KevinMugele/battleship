@@ -8,6 +8,7 @@ class Board
     @cells = create_cells
   end
 
+
   def create_cells
     cells = {}
     ("A".."D").to_a.each do |letter|
@@ -19,9 +20,11 @@ class Board
     cells
   end
 
+
   def valid_coordinate?(coordinate)
     @cells.has_key?(coordinate)
   end
+
 
   def not_occupied?(coordinates)
     coordinates.all? do |coordinate|
@@ -29,15 +32,18 @@ class Board
     end
   end
 
+
   def consecutive?(coordinates)
     (vertical_row(coordinates) || horizontal_column(coordinates)) && (horizontal_consecutive(coordinates) || vertical_consecutive(coordinates))
   end
+
 
   def vertical_row(coordinates)
     coordinates.all? do |coordinate|
       coordinate[0] == coordinates.first[0]
     end
   end
+
 
   def horizontal_consecutive(coordinates)
     ship_length = coordinates.length
@@ -64,11 +70,13 @@ class Board
     end
   end
 
+
   def horizontal_column(coordinates)
     coordinates.all? do |coordinate|
       coordinate[1] == coordinates.first[1]
     end
   end
+
 
   def valid_placement?(ship, coordinates)
     if (consecutive?(coordinates) && ship.length == coordinates.size && not_occupied?(coordinates))
@@ -78,6 +86,7 @@ class Board
     end
   end
 
+
   def place(ship, coordinates)
     if (valid_placement?(ship, coordinates))
       coordinates.each do |coordinate|
@@ -85,5 +94,4 @@ class Board
       end
     end
   end
-
 end
