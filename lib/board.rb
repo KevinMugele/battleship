@@ -21,4 +21,10 @@ class Board
   def valid_coordinate?(coordinate)
     @cells.has_key?(coordinate)
   end
+
+  def not_occupied?(coordinates)
+    coordinates.all? do |coordinate|
+      @cells[coordinate].empty?
+    end
+  end
 end
