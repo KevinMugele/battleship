@@ -46,7 +46,3 @@ RSpec.describe Board do
     expect(board.not_occupied?(["A1"])).to be true
   end
 end
-
-
-
-end

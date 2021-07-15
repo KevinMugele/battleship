@@ -5,17 +5,18 @@ class Board
   attr_reader :cells
 
   def initialize
-    @cells = {}
+    @cells = create_cells
   end
 
   def create_cells
+    cells = {}
     ("A".."D").to_a.each do |letter|
       ("1".."4").to_a.each do |number|
         cell_coordinate = letter + number
-        @cells[cell_coordinate] = Cell.new(cell_coordinate)
+        cells[cell_coordinate] = Cell.new(cell_coordinate)
       end
     end
-    @cells
+    cells
   end
 
   def valid_coordinate?(coordinate)
@@ -41,6 +42,7 @@ class Board
   def vertical_consecutive(coordinates)
     ship_length = coordinates.length
     (1..4).each_cons(ship_length) do |x|
+    end
       #make array of results, check results to coordinates, coordinates need change -
   end
 
@@ -53,5 +55,4 @@ class Board
   def valid_placement?(ship, coordinates)
     ship.length == coordinates.size && not_occupied?(coordinates) && consecutive?(coordinates)
   end
-
 end
