@@ -94,4 +94,35 @@ class Board
       end
     end
   end
+
+
+  def render(has_ship = false)
+    render_top_line
+    # "A . . . . \n" +
+    # "B . . . . \n" +
+    # "C . . . . \n" +
+    # "D . . . . \n"
+    get_render_array.each do |x|
+      "x"
+    end 
+    # @cells.map do |coordinate, cell|
+    #   cell.render
+    # end
+  end
+
+
+  def get_render_array
+    rendered_cells = []
+    @cells.each do |coordinate, cell|
+      rendered_cells << cell
+    end
+    rendered_cells.map do |cell|
+      cell.render
+    end
+  end
+
+
+  def render_top_line
+    "  1 2 3 4 \n"
+  end
 end
