@@ -57,6 +57,7 @@ class Game
   def computer_board_setup
     @computer_board = Board.new
     puts "I have laid out my ships on the grid."
+        puts "==============COMPUTER BOARD=============="
     show_board(computer_board)
   end
 
@@ -71,17 +72,15 @@ class Game
     show_board_with_ships(player_board)
     get_player_ship_coords(player_cruiser)
     place_player_ship(player_cruiser)
-    # take input for the cruiser
     puts "Enter the cells of where you want to place the submarine(2 spaces)"
     puts "==============PLAYER BOARD=============="
     show_board_with_ships(player_board)
     get_player_ship_coords(player_submarine)
     place_player_ship(player_submarine)
-    # take input for the submarine
   end
 
   def get_player_ship_coords(ship)
-    puts "Please format as follows: "A1", "A2", "A3""
+    puts "Please format as follows: A1 A2 A3."
     coordinates = user_input.upcase.split
     until @player_board.valid_placement?
       puts "Invalid Placement. Please try again!"
