@@ -16,6 +16,8 @@ class Game
 
   def start
     main_menu
+    puts "Let's start the game"
+    take_turn
   end
 
   def user_input
@@ -36,6 +38,7 @@ class Game
         exit_game
       else
         puts "Invalid input. Please enter (p) to play; (q) to quit."
+        player_input = user_input.downcase
       end
     end
   end
@@ -56,6 +59,7 @@ class Game
 
   def computer_board_setup
     @computer_board = Board.new
+    # NEED TO MAKE A METHOD TO RANDOMIZE SHIP PLACEMENTS FOR COMPUTER
     puts "I have laid out my ships on the grid."
         puts "==============COMPUTER BOARD=============="
     show_board(computer_board)
@@ -68,21 +72,19 @@ class Game
     puts "==============PLAYER BOARD=============="
     show_board(player_board)
     puts "Enter the cells of where you want to place the cruiser(3 spaces)"
+    get_player_ship_coords(player_ships[0])
+    place_player_ship(player_ships[0])
     puts "==============PLAYER BOARD=============="
     show_board_with_ships(player_board)
-    get_player_ship_coords(player_cruiser)
-    place_player_ship(player_cruiser)
     puts "Enter the cells of where you want to place the submarine(2 spaces)"
-    puts "==============PLAYER BOARD=============="
-    show_board_with_ships(player_board)
-    get_player_ship_coords(player_submarine)
-    place_player_ship(player_submarine)
+    get_player_ship_coords(player_ships[1])
+    place_player_ship(player_ships[1])
   end
 
   def get_player_ship_coords(ship)
     puts "Please format as follows: A1 A2 A3."
     coordinates = user_input.upcase.split
-    until @player_board.valid_placement?
+    until @player_board.valid_placement?(ship, coordinates)
       puts "Invalid Placement. Please try again!"
       coordinates = user_input.upcase.split
     end
@@ -106,6 +108,14 @@ class Game
     show_board(computer_board)
     puts "=============PLAYER BOARD============="
     show_board_with_ships(player_board)
+  end
+
+  def take_turn
+    # if (computer_cruiser.sunk? && computer_submarine.sunk?) || (player_cruiser.sunk? && player_submarine.sunk?)
+    #   exit_game
+    # else
+
+
   end
 
   def exit_game
