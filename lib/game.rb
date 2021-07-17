@@ -5,13 +5,12 @@ require './lib/ship'
 
 class Game
 
-  attr_reader :player_board, :player_ships, :computer_board, :computer_ships
+  attr_reader :player_board, :computer_board
 
   def initialize
     @player_board = nil
     @computer_board = nil
-    @player_ships = []
-    @computer_ships = []
+
   end
 
   def start
@@ -41,23 +40,27 @@ class Game
   end
 
   def game_setup
-    computer_board_setup(board)
-    puts "Place your ships on the board"
-    show_board_with_ships
-    puts "Enter the cells for the submarine(2 spaces)"
-    show_board_with_ships
+    computer_board_setup
+    player_board_setup
+    show_both_boards
   end
 
-  def computer_board_setup(board)
-    #make board for computer
+  def computer_board_setup
+    @computer_board = Board.new
     puts "I have laid out my ships on the grid."
+    show_board(computer_board)
   end
 
-  def place_ships
+  def player_board_setup
+    @player_board = Board.new
+    puts "Place your ships on the board"
     puts "The cruiser is 3 units long and the submarine is 2 units long."
-    show_board(board)
+    show_board(player_board)
     puts "Enter the cells of where you want to place the cruiser(3 spaces)"
-
+    show_board_with_ships(player_board)
+    # take input for the cruiser
+    puts "Enter the cells of where you want to place the submarine(2 spaces)"
+    # take input for the submarine
   end
 
   def show_board(board)
@@ -66,6 +69,13 @@ class Game
 
   def show_board_with_ships(board)
     puts board.render(true)
+  end
+
+  def show_both_boards
+    puts "=============COMPUTER BOARD============="
+    show_board(computer_board)
+    puts "=============PLAYER BOARD============="
+    show_board_with_ships(player_board)
   end
 
   def exit_game
