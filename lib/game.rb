@@ -72,7 +72,7 @@ class Game
     place_computer_board(@computer_ships[0])
     place_computer_board(@computer_ships[1])
     puts "I have laid out my ships on the grid."
-        puts "==============COMPUTER BOARD=============="
+    puts "==============COMPUTER BOARD=============="
     show_board(computer_board)
   end
 
@@ -138,8 +138,6 @@ class Game
     # make sure it has not been fired upon previously
     #
     # else
-
-
   end
 
   def computer_take_turn
