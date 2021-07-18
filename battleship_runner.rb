@@ -3,4 +3,6 @@ require './lib/cell'
 require './lib/ship'
 require './lib/game'
 
-game.start 
+
+game = Game.new
+game.start
