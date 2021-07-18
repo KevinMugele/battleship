@@ -59,10 +59,23 @@ class Game
 
   def computer_board_setup
     @computer_board = Board.new
-    # NEED TO MAKE A METHOD TO RANDOMIZE SHIP PLACEMENTS FOR COMPUTER
+    place_computer_board(@computer_ships[0])
+    place_computer_board(@computer_ships[1])
     puts "I have laid out my ships on the grid."
         puts "==============COMPUTER BOARD=============="
     show_board(computer_board)
+  end
+
+  def computer_coord(computer_ship)
+    computer_coordinates = @computer_board.cells.keys.sample(computer_ship.length)
+
+    until computer_board.valid_placement?(computer_ship, computer_coordinates)
+      computer_coordinates = @computer_board.cells.keys.sample(computer_ship.length)
+    end
+  end
+
+  def place_computer_board(ship)
+    @computer_board.place(ship, computer_coord(ship))
   end
 
   def player_board_setup
