@@ -16,8 +16,18 @@ class Game
 
   def start
     main_menu
-    puts "Let's start the game"
-    take_turn
+    puts "Let's start the game!"
+
+    until (computer_cruiser.sunk? && computer_submarine.sunk?) || (player_cruiser.sunk? && player_submarine.sunk?)
+      if (computer_cruiser.sunk? && computer_submarine.sunk?)
+        player_win
+      elsif (player_cruiser.sunk? && player_submarine.sunk?)
+        computer_win
+      else
+        player_take_turn
+        computer_take_turn
+      end
+    end
   end
 
   def user_input
@@ -123,12 +133,30 @@ class Game
     show_board_with_ships(player_board)
   end
 
-  def take_turn
-    # if (computer_cruiser.sunk? && computer_submarine.sunk?) || (player_cruiser.sunk? && player_submarine.sunk?)
-    #   exit_game
+  def player_take_turn
+    # gets.chomp a coordinate
+    # make sure it has not been fired upon previously
+    #
     # else
 
 
+  end
+
+  def computer_take_turn
+    # .sample a random key for the guess
+    # make sure it has not already been fired upon
+  end
+
+  def player_win
+    puts "Congratulations! You won!"
+    puts "Heading back to main menu"
+    main_menu
+  end
+
+  def computer_win
+    puts "I'm sorry, but you are a loser!"
+    puts "Heading back to main menu"
+    main_menu
   end
 
   def exit_game
