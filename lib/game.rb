@@ -18,8 +18,6 @@ class Game
     main_menu
     puts "Let's start the game!"
     take_turns
-
-
   end
 
   def user_input
@@ -130,15 +128,33 @@ class Game
   end
 
   def take_turns
-
     until computer_ships_sunk? || player_ships_sunk?
       show_both_boards
-      player_take_turn
-      # need to get feedback for each shot
-      computer_take_turn
-      # need feedback
+      player_feedback(player_take_turn)
+      computer_feedback(computer_take_turn)
     end
     game_over
+  end
+
+
+  def player_feedback(player_take_turn)
+    if @computer_board.cells[player_take_turn].render == "X"
+      puts "You sunk the ship!"
+    elsif @computer_board.cells[player_take_turn].render == "H"
+      puts "Nice hit!"
+    else @computer_board.cells[player_take_turn].render == "M"
+      puts "Sorry, that was a miss"
+    end
+  end
+
+  def computer_feedback(computer_take_turn)
+    if @player_board.cells[computer_take_turn].render == "X"
+      puts "The Computer has sunk a ship!!!!"
+    elsif @player_board.cells[computer_take_turn].render == "H"
+      puts "The Computer hit your ship!!"
+    else @player_board.cells[computer_take_turn].render == "M"
+      puts "The computer missed."
+    end
   end
 
   def player_take_turn
@@ -152,8 +168,8 @@ class Game
 
     @computer_board.cells[player_shot].fire_upon
     player_shot
-
   end
+
 
   def computer_take_turn
     computer_shot = player_board.cells.keys.sample
@@ -173,7 +189,7 @@ class Game
   win
   end
 
-  def computer_ships_sunk?
+  def player_ships_sunk?
     lose = @player_ships.all? do |ship|
       ship.sunk?
     end
@@ -187,7 +203,7 @@ class Game
       player_win
     end
     remove_ships
-    main_menu
+    start
   end
 
   def remove_ships
@@ -198,13 +214,12 @@ class Game
   def player_win
     puts "Congratulations! You won!"
     puts "Heading back to main menu"
-    main_menu
+
   end
 
   def computer_win
     puts "I'm sorry, but you are a loser!"
     puts "Heading back to main menu"
-    main_menu
   end
 
   def exit_game
