@@ -17,17 +17,9 @@ class Game
   def start
     main_menu
     puts "Let's start the game!"
+    take_turns
 
-    until (computer_ships[0].sunk? && computer_ships[1].sunk?) || (player_ships[0].sunk? && player_ships[1].sunk?)
-      if (computer_ships[0].sunk? && computer_ships[1].sunk?)
-        player_win
-      elsif (player_ships[0].sunk? && player_ships[1].sunk?)
-        computer_win
-      else
-        player_take_turn
-        computer_take_turn
-      end
-    end
+
   end
 
   def user_input
@@ -46,7 +38,7 @@ class Game
         player_input = "done"
       elsif
         player_input == "q"
-        exit_game
+        exit
         player_input = "done"
       else
         puts "Invalid input. Please enter (p) to play; (q) to quit."
@@ -137,6 +129,16 @@ class Game
     show_board_with_ships(@player_board)
   end
 
+  def take_turns
+
+    until computer_ships_sunk? || player_ships_sunk?
+      show_both_boards
+      player_take_turn
+      computer_take_turn
+    end
+    game_over
+  end
+
   def player_take_turn
     # gets.chomp a coordinate
     # make sure it has not been fired upon previously
@@ -147,6 +149,35 @@ class Game
   def computer_take_turn
     # .sample a random key for the guess
     # make sure it has not already been fired upon
+  end
+
+  def computer_ships_sunk?
+    win = @computer_ships.all? do |ship|
+      ship.sunk?
+    end
+  win
+  end
+
+  def computer_ships_sunk?
+    lose = @player_ships.all? do |ship|
+      ship.sunk?
+    end
+  lose
+  end
+
+  def game_over
+    if player_ships_sunk?
+      computer_win
+    else
+      player_win
+    end
+    remove_ships
+    main_menu
+  end 
+
+  def remove_ships
+    computer_ships = []
+    player_ships = []
   end
 
   def player_win
