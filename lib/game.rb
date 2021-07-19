@@ -134,21 +134,36 @@ class Game
     until computer_ships_sunk? || player_ships_sunk?
       show_both_boards
       player_take_turn
+      # need to get feedback for each shot
       computer_take_turn
+      # need feedback
     end
     game_over
   end
 
   def player_take_turn
-    # gets.chomp a coordinate
-    # make sure it has not been fired upon previously
-    #
-    # else
+    puts "Enter coordinate for your shot."
+    player_shot = user_input.upcase
+
+    until @computer_board.valid_coordinate?(player_shot) && @computer_board.cells[player_shot].fired_upon? == false
+      puts "Please try again. Enter a valid coordinate"
+      player_shot = user_input.upcase
+    end
+
+    @computer_board.cells[player_shot].fire_upon
+    player_shot
+
   end
 
   def computer_take_turn
-    # .sample a random key for the guess
-    # make sure it has not already been fired upon
+    computer_shot = player_board.cells.keys.sample
+
+    until player_board.cells[computer_shot].fired_upon? == false
+      computer_shot = player_board.cells.keys.sample
+    end
+
+    @player_board.cells[computer_shot].fire_upon
+    computer_shot
   end
 
   def computer_ships_sunk?
@@ -173,7 +188,7 @@ class Game
     end
     remove_ships
     main_menu
-  end 
+  end
 
   def remove_ships
     computer_ships = []
