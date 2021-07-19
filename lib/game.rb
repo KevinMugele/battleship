@@ -1,11 +1,10 @@
-require './lib/board'
-require './lib/cell'
-require './lib/ship'
-
-
 class Game
 
-  attr_reader :player_board, :computer_board, :player_ships, :computer_ships
+  attr_reader :player_board,
+              :computer_board,
+              :player_ships,
+              :computer_ships
+
   def initialize
     @player_board = nil
     @computer_board = nil
@@ -86,12 +85,12 @@ class Game
     puts "The cruiser is 3 units long and the submarine is 2 units long."
     puts "==============PLAYER BOARD=============="
     show_board(player_board)
-    puts "Enter the cells of where you want to place the cruiser(3 spaces)"
+    puts "Enter the cells of where you want to place the cruiser (3 spaces)"
     user_coords = get_player_ship_coords(player_ships[0])
     place_player_ship(player_ships[0], user_coords)
     puts "==============PLAYER BOARD=============="
     show_board_with_ships(player_board)
-    puts "Enter the cells of where you want to place the submarine(2 spaces)"
+    puts "Enter the cells of where you want to place the submarine (2 spaces)"
     user_coords = get_player_ship_coords(player_ships[1])
     place_player_ship(player_ships[1], user_coords)
   end
@@ -134,7 +133,6 @@ class Game
     game_over
   end
 
-
   def player_feedback(player_take_turn)
     if @computer_board.cells[player_take_turn].render == "X"
       puts "You sunk the ship!"
@@ -167,7 +165,6 @@ class Game
     @computer_board.cells[player_shot].fire_upon
     player_shot
   end
-
 
   def computer_take_turn
     computer_shot = player_board.cells.keys.sample
@@ -213,7 +210,6 @@ class Game
     puts "!!!!!!!!!!!!!!!!!!!!!!!!!"
     puts "Congratulations! You won!"
     puts "Heading back to main menu"
-
   end
 
   def computer_win
