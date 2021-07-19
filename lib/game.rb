@@ -6,7 +6,6 @@ require './lib/ship'
 class Game
 
   attr_reader :player_board, :computer_board, :player_ships, :computer_ships
-
   def initialize
     @player_board = nil
     @computer_board = nil
@@ -17,17 +16,7 @@ class Game
   def start
     main_menu
     puts "Let's start the game!"
-
-    until (computer_cruiser.sunk? && computer_submarine.sunk?) || (player_cruiser.sunk? && player_submarine.sunk?)
-      if (computer_cruiser.sunk? && computer_submarine.sunk?)
-        player_win
-      elsif (player_cruiser.sunk? && player_submarine.sunk?)
-        computer_win
-      else
-        player_take_turn
-        computer_take_turn
-      end
-    end
+    take_turns
   end
 
   def user_input
@@ -40,12 +29,14 @@ class Game
 
     player_input = user_input.downcase
 
-    while player_input != "p" || player_input != "q"
+    until player_input == "done"
       if player_input == "p"
         game_setup
+        player_input = "done"
       elsif
         player_input == "q"
-        exit_game
+        exit
+        player_input = "done"
       else
         puts "Invalid input. Please enter (p) to play; (q) to quit."
         player_input = user_input.downcase
@@ -79,9 +70,10 @@ class Game
   def computer_coord(computer_ship)
     computer_coordinates = @computer_board.cells.keys.sample(computer_ship.length)
 
-    until computer_board.valid_placement?(computer_ship, computer_coordinates)
+    until @computer_board.valid_placement?(computer_ship, computer_coordinates)
       computer_coordinates = @computer_board.cells.keys.sample(computer_ship.length)
     end
+    computer_coordinates
   end
 
   def place_computer_board(ship)
@@ -95,13 +87,13 @@ class Game
     puts "==============PLAYER BOARD=============="
     show_board(player_board)
     puts "Enter the cells of where you want to place the cruiser(3 spaces)"
-    get_player_ship_coords(player_ships[0])
-    place_player_ship(player_ships[0])
+    user_coords = get_player_ship_coords(player_ships[0])
+    place_player_ship(player_ships[0], user_coords)
     puts "==============PLAYER BOARD=============="
     show_board_with_ships(player_board)
     puts "Enter the cells of where you want to place the submarine(2 spaces)"
-    get_player_ship_coords(player_ships[1])
-    place_player_ship(player_ships[1])
+    user_coords = get_player_ship_coords(player_ships[1])
+    place_player_ship(player_ships[1], user_coords)
   end
 
   def get_player_ship_coords(ship)
@@ -114,8 +106,8 @@ class Game
     coordinates
   end
 
-  def place_player_ship(ship)
-    @player_board.place(ship, get_player_ship_coords(ship))
+  def place_player_ship(ship, user_coords)
+    @player_board.place(ship, user_coords)
   end
 
   def show_board(board)
@@ -128,33 +120,106 @@ class Game
 
   def show_both_boards
     puts "=============COMPUTER BOARD============="
-    show_board(computer_board)
+    show_board(@computer_board)
     puts "=============PLAYER BOARD============="
-    show_board_with_ships(player_board)
+    show_board_with_ships(@player_board)
+  end
+
+  def take_turns
+    until computer_ships_sunk? || player_ships_sunk?
+      show_both_boards
+      player_feedback(player_take_turn)
+      computer_feedback(computer_take_turn)
+    end
+    game_over
+  end
+
+
+  def player_feedback(player_take_turn)
+    if @computer_board.cells[player_take_turn].render == "X"
+      puts "You sunk the ship!"
+    elsif @computer_board.cells[player_take_turn].render == "H"
+      puts "Nice hit!"
+    else @computer_board.cells[player_take_turn].render == "M"
+      puts "Sorry, that was a miss"
+    end
+  end
+
+  def computer_feedback(computer_take_turn)
+    if @player_board.cells[computer_take_turn].render == "X"
+      puts "The Computer has sunk a ship!!!!"
+    elsif @player_board.cells[computer_take_turn].render == "H"
+      puts "The Computer hit your ship!!"
+    else @player_board.cells[computer_take_turn].render == "M"
+      puts "The computer missed."
+    end
   end
 
   def player_take_turn
-    # gets.chomp a coordinate
-    # make sure it has not been fired upon previously
-    #
-    # else
+    puts "Enter coordinate for your shot."
+    player_shot = user_input.upcase
+
+    until @computer_board.valid_coordinate?(player_shot) && @computer_board.cells[player_shot].fired_upon? == false
+      puts "Please try again. Enter a valid coordinate"
+      player_shot = user_input.upcase
+    end
+
+    @computer_board.cells[player_shot].fire_upon
+    player_shot
   end
 
+
   def computer_take_turn
-    # .sample a random key for the guess
-    # make sure it has not already been fired upon
+    computer_shot = player_board.cells.keys.sample
+
+    until player_board.cells[computer_shot].fired_upon? == false
+      computer_shot = player_board.cells.keys.sample
+    end
+
+    @player_board.cells[computer_shot].fire_upon
+    computer_shot
+  end
+
+  def computer_ships_sunk?
+    win = @computer_ships.all? do |ship|
+      ship.sunk?
+    end
+  win
+  end
+
+  def player_ships_sunk?
+    lose = @player_ships.all? do |ship|
+      ship.sunk?
+    end
+  lose
+  end
+
+  def game_over
+    if player_ships_sunk?
+      computer_win
+    else
+      player_win
+    end
+    remove_ships
+    start
+  end
+
+  def remove_ships
+    computer_ships = []
+    player_ships = []
   end
 
   def player_win
+    puts "!!!!!!!!!!!!!!!!!!!!!!!!!"
     puts "Congratulations! You won!"
     puts "Heading back to main menu"
-    main_menu
+
   end
 
   def computer_win
+    puts "!!!!!!!!!!!!!!!!!!!!!!!!!"
     puts "I'm sorry, but you are a loser!"
     puts "Heading back to main menu"
-    main_menu
   end
 
   def exit_game
