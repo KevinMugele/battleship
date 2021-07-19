@@ -18,10 +18,10 @@ class Game
     main_menu
     puts "Let's start the game!"
 
-    until (computer_cruiser.sunk? && computer_submarine.sunk?) || (player_cruiser.sunk? && player_submarine.sunk?)
-      if (computer_cruiser.sunk? && computer_submarine.sunk?)
+    until (computer_ships[0].sunk? && computer_ships[1].sunk?) || (player_ships[0].sunk? && player_ships[1].sunk?)
+      if (computer_ships[0].sunk? && computer_ships[1].sunk?)
         player_win
-      elsif (player_cruiser.sunk? && player_submarine.sunk?)
+      elsif (player_ships[0].sunk? && player_ships[1].sunk?)
         computer_win
       else
         player_take_turn
@@ -40,12 +40,14 @@ class Game
 
     player_input = user_input.downcase
 
-    while player_input != "p" || player_input != "q"
+    until player_input == "done"
       if player_input == "p"
         game_setup
+        player_input = "done"
       elsif
         player_input == "q"
         exit_game
+        player_input = "done"
       else
         puts "Invalid input. Please enter (p) to play; (q) to quit."
         player_input = user_input.downcase
@@ -79,12 +81,14 @@ class Game
   def computer_coord(computer_ship)
     computer_coordinates = @computer_board.cells.keys.sample(computer_ship.length)
 
-    until computer_board.valid_placement?(computer_ship, computer_coordinates)
+    until @computer_board.valid_placement?(computer_ship, computer_coordinates)
       computer_coordinates = @computer_board.cells.keys.sample(computer_ship.length)
     end
+    computer_coordinates
   end
 
   def place_computer_board(ship)
+
     @computer_board.place(ship, computer_coord(ship))
   end
 
@@ -95,13 +99,13 @@ class Game
     puts "==============PLAYER BOARD=============="
     show_board(player_board)
     puts "Enter the cells of where you want to place the cruiser(3 spaces)"
-    get_player_ship_coords(player_ships[0])
-    place_player_ship(player_ships[0])
+    user_coords = get_player_ship_coords(player_ships[0])
+    place_player_ship(player_ships[0], user_coords)
     puts "==============PLAYER BOARD=============="
     show_board_with_ships(player_board)
     puts "Enter the cells of where you want to place the submarine(2 spaces)"
-    get_player_ship_coords(player_ships[1])
-    place_player_ship(player_ships[1])
+    user_coords = get_player_ship_coords(player_ships[1])
+    place_player_ship(player_ships[1], user_coords)
   end
 
   def get_player_ship_coords(ship)
@@ -114,8 +118,8 @@ class Game
     coordinates
   end
 
-  def place_player_ship(ship)
-    @player_board.place(ship, get_player_ship_coords(ship))
+  def place_player_ship(ship, user_coords)
+    @player_board.place(ship, user_coords)
   end
 
   def show_board(board)
@@ -128,9 +132,9 @@ class Game
 
   def show_both_boards
     puts "=============COMPUTER BOARD============="
-    show_board(computer_board)
+    show_board(@computer_board)
     puts "=============PLAYER BOARD============="
-    show_board_with_ships(player_board)
+    show_board_with_ships(@player_board)
   end
 
   def player_take_turn
