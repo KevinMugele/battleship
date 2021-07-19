@@ -6,7 +6,6 @@ require './lib/ship'
 class Game
 
   attr_reader :player_board, :computer_board, :player_ships, :computer_ships
-
   def initialize
     @player_board = nil
     @computer_board = nil
@@ -78,7 +77,6 @@ class Game
   end
 
   def place_computer_board(ship)
-
     @computer_board.place(ship, computer_coord(ship))
   end
 
@@ -212,12 +210,14 @@ class Game
   end
 
   def player_win
+    puts "!!!!!!!!!!!!!!!!!!!!!!!!!"
     puts "Congratulations! You won!"
     puts "Heading back to main menu"
 
   end
 
   def computer_win
+    puts "!!!!!!!!!!!!!!!!!!!!!!!!!"
     puts "I'm sorry, but you are a loser!"
     puts "Heading back to main menu"
   end
