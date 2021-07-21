@@ -149,7 +149,7 @@ class Game
     elsif @player_board.cells[computer_take_turn].render == "H"
       puts "Direct hit! I have hit your ship!!"
     else @player_board.cells[computer_take_turn].render == "M"
-      puts "I missed :( )"
+      puts "I missed :("
     end
   end
 
