@@ -96,7 +96,7 @@ class Game
   end
 
   def get_player_ship_coords(ship)
-    puts "Please format as follows: A1 A2 A3."
+    puts "Please format as follows: Three coordinates: A1 A2 A3 and Two coordinates: B2 B3"
     coordinates = user_input.upcase.split
     until @player_board.valid_placement?(ship, coordinates)
       puts "Invalid Placement. Please try again!"
@@ -139,17 +139,17 @@ class Game
     elsif @computer_board.cells[player_take_turn].render == "H"
       puts "Nice hit!"
     else @computer_board.cells[player_take_turn].render == "M"
-      puts "Sorry, that was a miss"
+      puts "Sorry, that was a miss."
     end
   end
 
   def computer_feedback(computer_take_turn)
     if @player_board.cells[computer_take_turn].render == "X"
-      puts "The Computer has sunk a ship!!!!"
+      puts "I have sunk your ship!!!!"
     elsif @player_board.cells[computer_take_turn].render == "H"
-      puts "The Computer hit your ship!!"
+      puts "Direct hit! I have hit your ship!!"
     else @player_board.cells[computer_take_turn].render == "M"
-      puts "The computer missed."
+      puts "I missed :( )"
     end
   end
 
